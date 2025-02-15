@@ -82,7 +82,16 @@ class ParkingSystem
     
     parking_lot.floors.each_with_index do |floor, index|
       if floor.send("available_#{vehicle_type}_slots") > 0
-        floor.available_car_slots -= 1
+        case vehicle_type
+        when "car"
+          floor.available_car_slots -= 1
+        when "bike"
+          floor.available_bike_slots -= 1
+        when "truck"
+          floor.available_truck_slots -= 1
+        when "van"
+          floor.available_van_slots -= 1
+        end
         parking_lot.parked_vehicles[vehicle_registration_number] = {user_name: user_name, request_date_time: request_date_time, vehicle_type: vehicle_type, floor_index: index}
         return {status: "success", message: "Vehicle parked successfully", floor: index}
       end
@@ -95,7 +104,7 @@ class ParkingSystem
     return {status: "failed", error: "Parking lot #{parking_lot_name} not found"} if parking_lot.nil?
     
     if !parking_lot.parked_vehicles.has_key?(vehicle_registration_number)
-      {status: "failed", error: "Vehicle with registration number #{vehicle_registration_number} not found"}
+      return {status: "failed", error: "Vehicle with registration number #{vehicle_registration_number} not found"}
     end
 
     parked_vehicle = parking_lot.parked_vehicles[vehicle_registration_number]
@@ -114,7 +123,16 @@ class ParkingSystem
     end
 
     parked_floor = parking_lot.floors[parked_vehicle[:floor_index]]
-    parked_floor.available_car_slots += 1
+    case parked_vehicle[:vehicle_type]
+    when "car"
+      parked_floor.available_car_slots += 1
+    when "bike"
+      parked_floor.available_bike_slots += 1
+    when "truck"
+      parked_floor.available_truck_slots += 1
+    when "van"
+      parked_floor.available_van_slots += 1
+    end
     parking_lot.parked_vehicles.delete(vehicle_registration_number)
     { status: "success", total_parking_hours: total_hours, fees: "#{parking_fees}Rs", user_name: parked_vehicle[:user_name], vehicle_registration_number: vehicle_registration_number }
   end

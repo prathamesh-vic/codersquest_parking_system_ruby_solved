@@ -5,7 +5,7 @@ require 'debug'
 # https://github.com/sinatra/sinatra?tab=readme-ov-file#available-settings
 # for preventing "attack prevented by Rack::Protection::HostAuthorization" error
 # add your ngrok host to permitted_hosts below
-set :host_authorization, :permitted_hosts => [".localhost", "9975530fb821.ngrok.app"]
+set :host_authorization, :permitted_hosts => [".localhost", "9975530fb821.ngrok.app", "9a0b9998f66d.ngrok.app"]
 
 # Code below is for testing the setup of the server, do not modify or else the first test
 # might fail.
